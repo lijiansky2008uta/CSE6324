@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="speechPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InfiniteStreamRecognize">
+    <children>
+        <VBox alignment="TOP_CENTER" layoutX="16.0" layoutY="113.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="266.0" prefWidth="201.0" spacing="40.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="389.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="96.0" prefWidth="126.0" text="Text">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="50.0" prefWidth="126.0" text="Code">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+        </VBox>
+        <Label layoutX="180.0" layoutY="26.0" text="Cobra System">
+            <font>
+                <Font name="Monaco" size="36.0" />
+            </font></Label>
+        <HBox layoutX="243.0" layoutY="395.0" spacing="100.0" />
+        <Label alignment="CENTER" layoutX="13.0" layoutY="453.0" prefHeight="27.0" prefWidth="149.0" text="Speech-to-Text Demo" AnchorPane.leftAnchor="13.0" />
+          <Button fx:id="btnRecord" layoutX="122.0" layoutY="395.0" onAction="#Demo" prefHeight="34.0" prefWidth="80.0" text="Record" />
+      <Button fx:id="btnStop" layoutX="263.0" layoutY="395.0" onAction="#stopRecord" prefHeight="34.0" prefWidth="80.0" text="Stop" />
+      <TextArea fx:id="response" layoutX="243.0" layoutY="113.0" prefHeight="90.0" prefWidth="305.0" />
+      <Button fx:id="btnLogout" layoutX="396.0" layoutY="395.0" prefHeight="34.0" prefWidth="80.0" text="Logout" />
+      <TextArea fx:id="code" layoutX="243.0" layoutY="237.0" prefHeight="152.0" prefWidth="305.0" />
+    </children>
+</AnchorPane>
