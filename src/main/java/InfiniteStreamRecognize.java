@@ -34,8 +34,8 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
     @FXML
     private TextArea code;
 
-    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw");
-//    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
+
+    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
     final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 //    private Main mainApp = new Main();
 
