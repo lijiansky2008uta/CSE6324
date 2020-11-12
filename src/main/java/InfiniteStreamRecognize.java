@@ -116,7 +116,7 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
             System.out.println("connect database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            // 执行查询
+            // Select from database
 //            System.out.println(" 实例化Statement对象...");
             stmt = conn.createStatement();
             String sql;
@@ -143,17 +143,17 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
             stmt.close();
             conn.close();
         }catch(SQLException se){
-            // 处理 JDBC 错误
+            // handle JDBC error
             se.printStackTrace();
         }catch(Exception e){
-            // 处理 Class.forName 错误
+            // handle Class.forName error
             e.printStackTrace();
         }finally{
-            // 关闭资源
+            // close
             try{
                 if(stmt!=null) stmt.close();
             }catch(SQLException se2){
-            }// 什么都不做
+            }
             try{
                 if(conn!=null) conn.close();
             }catch(SQLException se){
