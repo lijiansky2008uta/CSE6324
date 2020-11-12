@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import net.sourceforge.javaflacencoder.FLACFileWriter;
 
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +36,15 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
     private TextArea code;
 
 
-    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
+//    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
+    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"); //usable
     final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 //    private Main mainApp = new Main();
+
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB";
+    static final String USER = "root";
+    static final String PASS = "123456";
 
     @FXML
     private void Demo() throws IOException {
@@ -102,19 +109,70 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
 
     @FXML
     private void writeCode(String text){
-        ArrayList<String> arr = new ArrayList<String>();
-        arr.addAll(Arrays.asList(text.split("\\s+")));
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            System.out.println("connect database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            // 执行查询
+//            System.out.println(" 实例化Statement对象...");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT speech, code FROM customized";
+
+            ResultSet rs = stmt.executeQuery(sql);
+            ArrayList<String> arr = new ArrayList<String>();
+            arr.addAll(Arrays.asList(text.split("\\s+")));
 //        String [] arr = text.split("\\s+");
-        String codeContent = "";
-        if(text.contains("write")){
-            int start = arr.indexOf("write") + 1;
-            int end = arr.size();
-            List<String> lists = arr.subList(start,end);
-            String str1= String.join(" " , lists);
-            codeContent = "System.out.println(\"" + str1 + "\");";
-            System.out.println(codeContent);
-            code.setText(codeContent);
+//            String codeContent = "";
+            while(rs.next()){
+                String codeContent = rs.getString("code");
+                if(text.contains(rs.getString("speech"))){
+//                    int start = arr.indexOf("write") + 1;
+//                    int end = arr.size();
+//                    List<String> lists = arr.subList(start,end);
+//                    String str1= String.join(" " , lists);
+//                    codeContent = code;
+                    System.out.println(codeContent);
+                    code.setText(codeContent);
+                }
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            // 处理 JDBC 错误
+            se.printStackTrace();
+        }catch(Exception e){
+            // 处理 Class.forName 错误
+            e.printStackTrace();
+        }finally{
+            // 关闭资源
+            try{
+                if(stmt!=null) stmt.close();
+            }catch(SQLException se2){
+            }// 什么都不做
+            try{
+                if(conn!=null) conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
         }
+//        ArrayList<String> arr = new ArrayList<String>();
+//        arr.addAll(Arrays.asList(text.split("\\s+")));
+////        String [] arr = text.split("\\s+");
+//        String codeContent = "";
+//        if(text.contains("write")){
+//            int start = arr.indexOf("write") + 1;
+//            int end = arr.size();
+//            List<String> lists = arr.subList(start,end);
+//            String str1= String.join(" " , lists);
+//            codeContent = "System.out.println(\"" + str1 + "\");";
+//            System.out.println(codeContent);
+//            code.setText(codeContent);
+//        }
     }
 
     @FXML
