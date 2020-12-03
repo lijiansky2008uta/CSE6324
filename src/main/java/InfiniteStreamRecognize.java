@@ -3,10 +3,20 @@ import com.darkprograms.speech.recognizer.GSpeechDuplex;
 import com.darkprograms.speech.recognizer.GSpeechResponseListener;
 import com.darkprograms.speech.recognizer.GoogleResponse;
 
+import com.sun.glass.events.KeyEvent;
+import com.sun.javafx.sg.prism.NGNode;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import net.sourceforge.javaflacencoder.FLACFileWriter;
 
+import java.awt.*;
+import java.awt.datatransfer.*;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,6 +29,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+//import javax.swing.*;
+
+
 
 public class InfiniteStreamRecognize implements GSpeechResponseListener{
 
@@ -34,17 +48,25 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
     private TextArea response;
     @FXML
     private TextArea code;
-
+    @FXML
+    private ImageView logo;
+    private Stage stage = new Stage();
+    //MainViewController mainViewController = new MainViewController();
 
     GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
 
     final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 //    private Main mainApp = new Main();
 
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB";
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/Cobra?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     static final String USER = "root";
-    static final String PASS = "123456";
+    static final String PASS = "12345678";
+
+    @FXML
+    private void initialize() {
+        logo.setImage(new Image("Cobra.png"));
+    }
 
     @FXML
     private void Demo() throws IOException {
@@ -53,7 +75,7 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
 //        final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 
         duplex.setLanguage("en");
-        btnStop.setDisable(true);
+//        btnStop.setDisable(true);
 
         new Thread(() -> {
             try {
@@ -63,8 +85,8 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
             }
 
         }).start();
-        btnRecord.setDisable(true);
-        btnStop.setDisable(false);
+//        btnRecord.setDisable(true);
+//        btnStop.setDisable(false);
 
         duplex.addResponseListener(new GSpeechResponseListener() {
             String old_text = "";
@@ -117,24 +139,18 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             // Select from database
-//            System.out.println(" 实例化Statement对象...");
+
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT speech, code FROM customized";
-
+//            if (mainViewController.getCodeLanguage() == "Java") {sql = "SELECT speech, code FROM customized_java";}
+//            else {sql = "SELECT speech, code FROM customized_python";}
+            sql = "SELECT speech, code FROM customized_java";
             ResultSet rs = stmt.executeQuery(sql);
             ArrayList<String> arr = new ArrayList<String>();
             arr.addAll(Arrays.asList(text.split("\\s+")));
-//        String [] arr = text.split("\\s+");
-//            String codeContent = "";
             while(rs.next()){
                 String codeContent = rs.getString("code");
                 if(text.contains(rs.getString("speech"))){
-//                    int start = arr.indexOf("write") + 1;
-//                    int end = arr.size();
-//                    List<String> lists = arr.subList(start,end);
-//                    String str1= String.join(" " , lists);
-//                    codeContent = code;
                     System.out.println(codeContent);
                     code.setText(codeContent);
                 }
@@ -160,6 +176,8 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
                 se.printStackTrace();
             }
         }
+
+//        // Test Code display
 //        ArrayList<String> arr = new ArrayList<String>();
 //        arr.addAll(Arrays.asList(text.split("\\s+")));
 ////        String [] arr = text.split("\\s+");
@@ -179,8 +197,8 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
     private void stopRecord() throws IOException {
         mic.close();
         duplex.stopSpeechRecognition();
-        btnRecord.setDisable(false);
-        btnStop.setDisable(true);
+//        btnRecord.setDisable(false);
+//        btnStop.setDisable(true);
         String text = response.getText();
         System.out.println("-----" + text);
         if(response.getText() != null && response.getText().contains("Cobra")){
@@ -191,12 +209,32 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
         }
     }
 //
-//    @FXML
-//    private void Logout() throws IOException {
+    @FXML
+    private void Logout() throws IOException, InterruptedException, AWTException {
 //        Stage stage = (Stage)btnLogout.getScene().getWindow();
 //        stage.close();
 //        mainApp.showLoginView();
-////        mainApp.setUser(null);
-//    }
+//        mainApp.setUser(null);
+        String text = code.getText();
+        setClipboardString(text);
+        Thread.sleep(3000);
+        Robot robot = new Robot();
+        robot.keyPress(KeyEvent.VK_COMMAND);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.delay(100);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_COMMAND);
+
+
+
+    }
+    public static void setClipboardString(String text) {
+        // 获取系统剪贴板
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        // 封装文本内容
+        Transferable trans = new StringSelection(text);
+        // 把文本内容设置到系统剪贴板
+        clipboard.setContents(trans, null);
+    }
 
 }
