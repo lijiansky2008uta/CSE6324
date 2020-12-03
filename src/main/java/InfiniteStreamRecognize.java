@@ -144,7 +144,7 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
             String sql;
             if (mainViewController.getCodeLanguage() == "Java") {sql = "SELECT speech, code FROM customized_java";}
             else {sql = "SELECT speech, code FROM customized_python";}
-            sql = "SELECT speech, code FROM customized_java";
+//            sql = "SELECT speech, code FROM customized_java";
             ResultSet rs = stmt.executeQuery(sql);
             ArrayList<String> arr = new ArrayList<String>();
             arr.addAll(Arrays.asList(text.split("\\s+")));
