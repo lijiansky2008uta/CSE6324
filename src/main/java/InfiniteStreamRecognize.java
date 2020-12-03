@@ -51,10 +51,10 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
     @FXML
     private ImageView logo;
     private Stage stage = new Stage();
-    //MainViewController mainViewController = new MainViewController();
+    MainViewController mainViewController = new MainViewController();
 
-    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
-
+//    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
+    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"); //usable
     final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 //    private Main mainApp = new Main();
 
@@ -142,8 +142,8 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
 
             stmt = conn.createStatement();
             String sql;
-//            if (mainViewController.getCodeLanguage() == "Java") {sql = "SELECT speech, code FROM customized_java";}
-//            else {sql = "SELECT speech, code FROM customized_python";}
+            if (mainViewController.getCodeLanguage() == "Java") {sql = "SELECT speech, code FROM customized_java";}
+            else {sql = "SELECT speech, code FROM customized_python";}
             sql = "SELECT speech, code FROM customized_java";
             ResultSet rs = stmt.executeQuery(sql);
             ArrayList<String> arr = new ArrayList<String>();
