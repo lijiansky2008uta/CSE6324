@@ -53,8 +53,8 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
     private Stage stage = new Stage();
     MainViewController mainViewController = new MainViewController();
 
-//    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
-    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"); //usable
+    GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
+
     final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 //    private Main mainApp = new Main();
 
@@ -74,7 +74,9 @@ public class InfiniteStreamRecognize implements GSpeechResponseListener{
 //        GSpeechDuplex duplex = new GSpeechDuplex("AIzaSyAUdcJX8qSgNS-gFBfoN0h64d3vi8wByjc");
 //        final Microphone mic = new Microphone(FLACFileWriter.FLAC);
 
-        duplex.setLanguage("en");
+        if (mainViewController.getSpeechLanguage() == "English") {duplex.setLanguage("en");}
+            else if(mainViewController.getSpeechLanguage() == "Chinese") {duplex.setLanguage("ch");}
+//        duplex.setLanguage("en");
 //        btnStop.setDisable(true);
 
         new Thread(() -> {
